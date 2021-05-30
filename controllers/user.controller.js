@@ -57,9 +57,6 @@ exports.createUser = async (req, res) => {
         //generate a signed token with user id and secret
         const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET);
 
-        // persist the token as 't' in cookie with expiry date
-        res.cookie("github_token", token, { expire: new Date() + 9999 });
-
         res.json({token, user});
     });
 }
