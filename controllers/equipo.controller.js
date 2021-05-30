@@ -51,7 +51,7 @@ exports.getOneTeam = async (req, res) => {
  * @param {Object} req 
  * @param {Object} res 
  */
- exports.getAllTeams = async (req, res) => {
+exports.getAllTeams = async (req, res) => {
   await Equipo.find().exec((err, equipos) => {
       if (err) {
           return res.status(400).json({
@@ -71,7 +71,7 @@ exports.getOneTeam = async (req, res) => {
  * @param {Object} req 
  * @param {Object} res 
  */
- exports.updateTeam = async (req, res) => {
+exports.updateTeam = async (req, res) => {
   let {equipoID} = req.params;
 
   await Equipo.findByIdAndUpdate({_id: equipoId}, {$set: req.body}, {new: true}, (err, equipo) => {
@@ -125,13 +125,12 @@ exports.removeMember = async (req, res) => {
     res.json(equipo);
   });
 }
-
 /**
  * Elimina el Equipo de la base de datos
  * @param {Object} req 
  * @param {Object} res 
  */
- exports.deleteTeam = async (req, res) => {
+exports.deleteTeam = async (req, res) => {
   let {equipoId} = req.params;
 
   // Encuentra y elimina el equipo por su ID
