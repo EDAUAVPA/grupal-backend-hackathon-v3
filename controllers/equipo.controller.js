@@ -25,6 +25,7 @@ exports.createTeam = async (req, res) => {
             error: 'Something went wrong',
           });
       }
+      res.json(equipo)
   });
 }
 /**
@@ -73,7 +74,7 @@ exports.getOneTeam = async (req, res) => {
  exports.updateTeam = async (req, res) => {
   let {equipoID} = req.params;
 
-  await Equipo.findByIdAndUpdate({_id: equipoID}, {$set: req.body}, {new: true}, (err, equipo) => {
+  await Equipo.findByIdAndUpdate({_id: equipoId}, {$set: req.body}, {new: true}, (err, equipo) => {
       if (err || !equipo) {
           return res.status(400).json({
             error: "Team couldn't be updated",
@@ -95,10 +96,29 @@ exports.addMember = async (req,res) => {
   let newUsersArray = usersArray.push(newUser)
   await Equipo.findByIdAndUpdate({_id: equipoID}, {users: newUsersArray }, {new: true}, (err, equipo) => {
     if (err || !equipo) {
-        return res.status(400).json({
+      return res.status(400).json({
           error: "Team couldn't be updated",
         });
-    }
+      }
+    res.json(equipo);
+  });
+}
+/**
+ * Encuentra un equipo por su Id y le quita el usuario del payload
+ * @param {Object} req 
+ * @param {Object} res 
+ */
+exports.removeMember = async (req, res) => {
+  let {equipoId} = req.params
+  let {userId} = req.body
+  let usersArray = await Equipo.findById(equipoId).users
+  let newUsersArray = usersArray.filter(user => user.id !== userId)
+  await Equipo.findByIdAndUpdate({_id: equipoID}, {users: newUsersArray }, {new: true}, (err, equipo) => {
+    if (err || !equipo) {
+      return res.status(400).json({
+          error: "Team couldn't be updated",
+        });
+      }
     res.json(equipo);
   });
 }
