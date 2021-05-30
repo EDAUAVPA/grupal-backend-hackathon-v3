@@ -26,9 +26,10 @@ app.get('/', (req, res) => {
     res.json({message: 'Welcome to the API REST of Github!'});
 })
 
-// Rutas para el crud de usuarios y repositorios
+// Rutas para el crud de usuarios, equipos y repositorios
 app.use('/api/user', require('./routes/user.js'));
 app.use('/api/repository', require('./routes/repository.js'));
+app.use('/api/equipo', require('./routes/equipo'));
 
 // Ruta para obtener la respuesta de la primera parte
 app.use('/api/github', require('./routes/secondPass.js'));
