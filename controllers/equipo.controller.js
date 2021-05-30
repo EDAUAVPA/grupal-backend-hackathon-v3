@@ -52,7 +52,7 @@ exports.getOneTeam = async (req, res) => {
  * @param {Object} res 
  */
 exports.getAllTeams = async (req, res) => {
-  await Equipo.find().exec((err, equipos) => {
+  await Equipo.find().populate("users").exec((err, equipos) => {
       if (err) {
           return res.status(400).json({
             error: 'Something went wrong',
@@ -62,6 +62,12 @@ exports.getAllTeams = async (req, res) => {
       if (equipos.length == 0) {
           res.json({message: 'No teams were found'})
       } else {
+          equipos.forEach((team) => {
+            team.users.forEach((user) => {
+              user.password = undefined;
+            })
+          });
+
           res.json(equipos);
       }
   })
