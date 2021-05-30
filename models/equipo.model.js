@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema.Types;
+const User = require('./user.model')
 
 const equipoSchema = new mongoose.Schema(
   {
@@ -7,9 +9,9 @@ const equipoSchema = new mongoose.Schema(
       required: true,
     },
     description: {
-      type: String
+      type: String,
   },
-    users:[]
+    users:[{type: ObjectId, ref: User}],
   },{
     timestamps: true,
   }

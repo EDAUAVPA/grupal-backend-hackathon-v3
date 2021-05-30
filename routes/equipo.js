@@ -7,6 +7,7 @@ const {
   getAllTeams,
   updateTeam,
   addMember,
+  removeMember,
   deleteTeam,
 } = require('../controllers/equipo.controller')
 
@@ -24,6 +25,9 @@ router.put('/:equipoId', updateTeam);
 
 //Ruta para agregar un miembro al equipo
 router.put('/addMember/:equipoId', addMember)
+
+//Ruta para eliminar un miembro del equipo
+router.put('/removeMember/:equipoId', removeMember)
 
 // Ruta para eliminar a un equipo
 router.delete('/', deleteTeam);
