@@ -33,7 +33,7 @@ exports.getCard = async (req, res) => {
     await Card.findOne({owner: req.user._id}, (err, card) => {
         if (err || !card) {
             return res.status(400).json({
-                error: 'Card Not Found',
+                error: 'No Credit Cards were found for this user',
             });
         }
 
@@ -56,7 +56,7 @@ exports.updateCard = async (req, res) => {
         (err, card) => {
         if (err || !card) {
             return res.status(400).json({
-              error: "Card couldn't be updated",
+              error: "Credit Card couldn't be updated",
             });
         }
 
