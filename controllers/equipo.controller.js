@@ -8,11 +8,11 @@ const User = require('../models/user.model');
  */
 exports.createTeam = async (req, res) => {
 
-  const { name, description, users } = JSON.parse(req.body);
+  const { name, description, users } = req.body;
   const newEquipo = {
     name: name,
     description: description,
-    users: users,
+    users: JSON.parse(users),
   }
 
   // Se crea el objeto del Equipo siguiendo el model establecido
@@ -74,6 +74,10 @@ exports.getAllTeams = async (req, res) => {
 exports.updateTeam = async (req, res) => {
   let {equipoId} = req.params;
 
+  if (req.body.users) {
+    req.body.users = JSON.parse(req.body.users);
+  }
+
   await Equipo.findByIdAndUpdate({_id: equipoId}, {$set: req.body}, {new: true}, (err, equipo) => {
       if (err || !equipo) {
           return res.status(400).json({
@@ -90,40 +94,66 @@ exports.updateTeam = async (req, res) => {
  * @param {Object} res 
  */
 exports.addMember = async (req,res) => {
-  let {equipoId} = req.params
-  let newUser = req.body
-  let usersArray = await Equipo.findById(equipoId).users
-  let newUsersArray = usersArray.push(newUser)
-  await Equipo.findByIdAndUpdate({_id: equipoID}, {users: newUsersArray }, {new: true}, (err, equipo) => {
-    if (err || !equipo) {
-      return res.status(400).json({
-          error: "Team couldn't be updated",
+  let {equipoId} = req.params;
+
+  let users = JSON.parse(req.body.users);
+
+  await Equipo.findById(equipoId, async (err, team) => {
+      if (err || !team) {
+        return res.status(400).json({
+          error: "Team not found",
         });
       }
-    res.json(equipo);
+
+      users.forEach((user) => {team.users.push(user._id)});
+
+      await Equipo.findByIdAndUpdate({_id: equipoId}, {$set: { users: team.users }}, {new: true}, (err, equipo) => {
+        if (err || !equipo) {
+          return res.status(400).json({
+              error: "Team couldn't be updated",
+            });
+          }
+        res.json(equipo);
+      });
+
   });
+  
+  
 }
+
 /**
  * Encuentra un equipo por su Id y le quita el usuario del payload
  * @param {Object} req 
  * @param {Object} res 
  */
 exports.removeMember = async (req, res) => {
-  let {equipoId} = req.params
-  let {userId} = req.body
-  let usersArray = await Equipo.findById(equipoId).users
-  if( ! usersArray.includes(userId) ) return res.status(400).json({
-    error: "Team didn't contain that member",
-  });
-  let newUsersArray = usersArray.filter(user => user !== userId)
-  await Equipo.findByIdAndUpdate({_id: equipoID}, {users: newUsersArray }, {new: true}, (err, equipo) => {
-    if (err || !equipo) {
+  let {equipoId} = req.params;
+  let {userId} = req.body;
+  
+  await Equipo.findById(equipoId, async (err, team) => {
+    if (err || !team) {
       return res.status(400).json({
-          error: "Team couldn't be updated",
-        });
-      }
-    res.json(equipo);
+        error: "Team not found",
+      });
+    }
+
+    if( !team.users.includes(userId) ) return res.status(400).json({
+      error: "Team didn't contain that member",
+    });
+
+    let newUsersArray = team.users.filter(user => user != userId);
+
+    await Equipo.findByIdAndUpdate({_id: equipoId}, {$set: {users: newUsersArray}}, {new: true}, (err, equipo) => {
+      if (err || !equipo) {
+        return res.status(400).json({
+            error: "Team couldn't be updated",
+          });
+        }
+      res.json(equipo);
+    });
   });
+  
+  
 }
 /**
  * Elimina el Equipo de la base de datos
