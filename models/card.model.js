@@ -3,20 +3,26 @@ const { ObjectId } = mongoose.Schema.Types;
 
 const cardSchema = new mongoose.Schema(
     {
-        author: {
+        owner: {
             type: ObjectId, 
             required: true
         },
         name: {
-            type: String
+            type: String,
+            required: true
         },
-        url: {
-            type: String
+        number: {
+            type: String,
+            required: true
         },
-        description: {
-            type: String
+        exp_date: {
+            type: Date,
+            required: true
         },
-        stack: []
+        credits: {
+            type: Number,
+            default: 0
+        }
     },
     {
         timestamps: true,

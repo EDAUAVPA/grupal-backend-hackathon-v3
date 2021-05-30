@@ -29,7 +29,8 @@ app.get('/', (req, res) => {
 // Rutas para el crud de usuarios, equipos y repositorios
 app.use('/api/user', require('./routes/user.js'));
 app.use('/api/repository', require('./routes/repository.js'));
-app.use('/api/equipo', require('./routes/equipo'));
+app.use('/api/equipo', require('./routes/equipo.js'));
+app.use('/api/card', require('./routes/card.js'));
 
 // Ruta para obtener la respuesta de la primera parte
 app.use('/api/github', require('./routes/secondPass.js'));
