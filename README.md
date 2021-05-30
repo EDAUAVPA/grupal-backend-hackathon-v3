@@ -100,7 +100,37 @@ Se utilizaron las siguientes rutas para realizar el CRUD (create, read, update &
 
 - **DELETE** /api/repository/:repoId 🠮 Elimina el repositorio especificado.\*\*
 
-**3. Ruta para encontrar la contraseña de la segunda parte:**
+**3. Rutas del Equipo:**
+
+- **POST** /api/equipo/ 🠮 Crea un equipo y lo devuelve como respuesta.\*\*
+
+- **GET** /api/equipo/ 🠮 Devuelve todos los equipos registrados como respuesta.
+
+- **GET** /api/equipo/:equipoId 🠮 Devuelve el equipo especificado.\*\*
+
+- **PUT** /api/equipo/:equipoId 🠮 Actualiza la información del equipo especificado.\*\*
+
+- **PUT** /api/equipo/addMember/:equipoId 🠮 Añade uno o más miembros al equipo especificado.\*\*
+
+- **PUT** /api/equipo/removeMember/:equipoId 🠮 Remueve un miembro del equipo especificado.\*\*
+
+- **DELETE** /api/equipo/:equipoId 🠮 Elimina el equipo especificado.\*\*
+
+**4. Rutas de la Tarjeta:**
+
+- **POST** /api/card/ 🠮 Crea una tarjeta y lo devuelve como respuesta.\*\*
+
+- **GET** /api/card/ 🠮 Devuelve la tarjeta asociada al usuario como respuesta.
+
+- **PUT** /api/card/:cardId 🠮 Actualiza la información de la tarjeta especificada.\*\*
+
+- **PUT** /api/card/addCredits/:cardId 🠮 Añade créditos a la tarjeta especificada.\*\*
+
+- **PUT** /api/card/pay/:cardId 🠮 Disminuye créditos de la tarjeta especificada.\*\*
+
+- **DELETE** /api/card/:cardId 🠮 Elimina la tarjeta especificada.\*\*
+
+**5. Ruta para encontrar la contraseña de la segunda parte:**
 
 - **GET** /api/github/:username 🠮 Devuelve todos los repositorios de github del usuario como respuesta, si el usuario es **"gagocarrilloedgar"**, devolverá un mensaje adicional con la contraseña para la segunda fase del reto.
 
