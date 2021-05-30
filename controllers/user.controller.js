@@ -1,8 +1,31 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const User = require('../models/user.model');
 const Repository = require('../models/repository.model');
 const { errorHandler } = require('../helpers/dbErrorHandler');
+
+
+/**
+ * Inicia sesión con el usuario
+ * @param {Object} req 
+ * @param {Object} res 
+ */
+exports.loginUser = async (req, res) => {
+    let {email, password} = req.body;
+
+    await User.findOne({email}, (err, user) => {
+        if (err || !user) {
+            return res.status(400).json({
+              error: 'User not found',
+            });
+        }
+
+
+        res.json(user);
+    })
+
+}
 
 /**
  * Recibe información de un usuario y lo registra en la base de datos
