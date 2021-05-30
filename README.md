@@ -74,6 +74,8 @@ Se utilizaron las siguientes rutas para realizar el CRUD (create, read, update &
 
 **1. Rutas del Usuario:**
 
+- **POST** /api/user/login 🠮 Autentica un usuario en base a su correo y contraseña y devuelve un token \*.
+
 - **POST** /api/user/ 🠮 Crea un nuevo usuario y lo devuelve como respuesta\*.
 
 - **GET** /api/user/ 🠮 Obtiene todos los usuarios como respuesta.\*\*

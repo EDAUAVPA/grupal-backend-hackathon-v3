@@ -1,8 +1,39 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const User = require('../models/user.model');
 const Repository = require('../models/repository.model');
 const { errorHandler } = require('../helpers/dbErrorHandler');
+
+
+/**
+ * Inicia sesión en base al correo y contraseña del usuario y devuelve un token
+ * @param {Object} req 
+ * @param {Object} res 
+ */
+exports.loginUser = async (req, res) => {
+    let {email, password} = req.body;
+
+    await User.findOne({email}, (err, user) => {
+        if (err || !user) {
+            return res.status(400).json({
+              error: 'Invalid Email',
+            });
+        }
+
+        if(bcrypt.compareSync(password, user.password)) {
+            const token = jwt.sign({_id: user._id, username: user.username, email: user.email}, process.env.JWT_SECRET);
+            res.json({token});
+
+        } else {
+            return res.status(400).json({
+                error: 'Invalid Password',
+              });
+        }
+        
+    })
+
+}
 
 /**
  * Recibe información de un usuario y lo registra en la base de datos
