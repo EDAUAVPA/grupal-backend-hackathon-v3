@@ -112,7 +112,10 @@ exports.removeMember = async (req, res) => {
   let {equipoId} = req.params
   let {userId} = req.body
   let usersArray = await Equipo.findById(equipoId).users
-  let newUsersArray = usersArray.filter(user => user.id !== userId)
+  if( ! usersArray.includes(userId) ) return res.status(400).json({
+    error: "Team didn't contain that member",
+  });
+  let newUsersArray = usersArray.filter(user => user !== userId)
   await Equipo.findByIdAndUpdate({_id: equipoID}, {users: newUsersArray }, {new: true}, (err, equipo) => {
     if (err || !equipo) {
       return res.status(400).json({
