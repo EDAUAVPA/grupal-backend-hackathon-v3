@@ -6,13 +6,14 @@ const Repository = require('../models/repository.model');
 const { errorHandler } = require('../helpers/dbErrorHandler');
 
 
+
 /**
  * Inicia sesión en base al correo y contraseña del usuario y devuelve un token
  * @param {Object} req 
  * @param {Object} res 
  */
 exports.loginUser = async (req, res) => {
-    let {email, password} = req.body;
+    let {email, password} = jwt.decode(req.body.token, process.env.JWT_SECRET);
 
     await User.findOne({email}, (err, user) => {
         if (err || !user) {
@@ -56,9 +57,6 @@ exports.createUser = async (req, res) => {
 
         //generate a signed token with user id and secret
         const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET);
-
-        // persist the token as 't' in cookie with expiry date
-        res.cookie("github_token", token, { expire: new Date() + 9999 });
 
         res.json({token, user});
     });

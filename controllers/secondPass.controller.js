@@ -10,7 +10,7 @@ exports.getSecondPassword = (req, res) => {
 
         if (foundRepository) {
             res.json({ 
-                message: `La contraseña para la segunda parte es: ${foundRepository?.id}`,
+                message: `La contraseña para la segunda parte es: ${foundRepository.id}`,
                 repository: foundRepository
             });
         } else {
