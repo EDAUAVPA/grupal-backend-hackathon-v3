@@ -6,13 +6,14 @@ const Repository = require('../models/repository.model');
 const { errorHandler } = require('../helpers/dbErrorHandler');
 
 
+
 /**
  * Inicia sesión en base al correo y contraseña del usuario y devuelve un token
  * @param {Object} req 
  * @param {Object} res 
  */
 exports.loginUser = async (req, res) => {
-    let {email, password} = req.body;
+    let {email, password} = jwt.decode(req.body.token, process.env.JWT_SECRET);
 
     await User.findOne({email}, (err, user) => {
         if (err || !user) {

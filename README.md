@@ -64,13 +64,13 @@ npm start
 
 Para poder iniciar este proyecto, se consiguió la contraseña resolviendo una serie de pistas para un problema, cuyo repositorio con la solución puede ser encontrado [aquí](https://github.com/EDAUAVPA/hackathon-scaperoom).
 
-La API REST se encuentra desplegada en [Heroku](https://www.heroku.com/), se puede encontrar en el siguiente enlace: [https://github-repo-hackathon.herokuapp.com](https://github-repo-hackathon.herokuapp.com/)
+La API REST se encuentra desplegada en [Heroku](https://www.heroku.com/), se puede encontrar en el siguiente enlace: [https://grupal-github-repo-hackathon.herokuapp.com/](https://grupal-github-repo-hackathon.herokuapp.com/)
 
 Se siguieron las instrucciones dadas para el desarrollo de los modelos para la base de datos en MongoDB.
 
 Se utilizaron las siguientes rutas para realizar el CRUD (create, read, update & delete) de los modelos:
 
-> _Nota: La ruta raiz puede ser https://github-repo-hackathon.herokuapp.com/ (desplegada en heroku) o http://localhost:3000/ (si se despliega en un entorno local)_
+> _Nota: La ruta raiz puede ser https://grupal-github-repo-hackathon.herokuapp.com/ (desplegada en heroku) o http://localhost:3000/ (si se despliega en un entorno local)_
 
 **1. Rutas del Usuario:**
 
