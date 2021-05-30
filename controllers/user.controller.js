@@ -7,7 +7,7 @@ const { errorHandler } = require('../helpers/dbErrorHandler');
 
 
 /**
- * Inicia sesión con el usuario
+ * Inicia sesión en base al correo y contraseña del usuario y devuelve un token
  * @param {Object} req 
  * @param {Object} res 
  */
@@ -17,12 +17,20 @@ exports.loginUser = async (req, res) => {
     await User.findOne({email}, (err, user) => {
         if (err || !user) {
             return res.status(400).json({
-              error: 'User not found',
+              error: 'Invalid Email',
             });
         }
 
+        if(bcrypt.compareSync(password, user.password)) {
+            const token = jwt.sign({_id: user._id, username: user.username, email: user.email}, process.env.JWT_SECRET);
+            res.json({token});
 
-        res.json(user);
+        } else {
+            return res.status(400).json({
+                error: 'Invalid Password',
+              });
+        }
+        
     })
 
 }
