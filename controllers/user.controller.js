@@ -1,8 +1,47 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const User = require('../models/user.model');
 const Repository = require('../models/repository.model');
 const { errorHandler } = require('../helpers/dbErrorHandler');
+
+
+
+/**
+ * Inicia sesión en base al correo y contraseña del usuario y devuelve un token
+ * @param {Object} req 
+ * @param {Object} res 
+ */
+exports.loginUser = async (req, res) => {
+    try {
+        let {email, password} = jwt.decode(req.body.token, process.env.JWT_SECRET);
+        
+        await User.findOne({email}, (err, user) => {
+            if (err || !user) {
+                return res.status(400).json({
+                  error: 'Invalid Email',
+                });
+            }
+    
+            if(bcrypt.compareSync(password, user.password)) {
+                const token = jwt.sign({_id: user._id, username: user.username, email: user.email}, process.env.JWT_SECRET);
+                res.json({token});
+    
+            } else {
+                return res.status(400).json({
+                    error: 'Invalid Password',
+                  });
+            }
+            
+        });
+
+    } catch (err) {
+        return res.status(400).json({
+            error: 'Something went wrong || Invalid data'
+        });
+    }
+    
+}
 
 /**
  * Recibe información de un usuario y lo registra en la base de datos
@@ -10,27 +49,33 @@ const { errorHandler } = require('../helpers/dbErrorHandler');
  * @param {Object} res 
  */
 exports.createUser = async (req, res) => {
+    let newProfile = jwt.decode(req.body.token, process.env.JWT_SECRET);
 
-    let user = new User(req.body);
+    if (newProfile) {
+        let user = new User(newProfile);
 
-    await user.save((err, user) => {
-        if (err) {
-            return res.status(400).json({
-              error: errorHandler(err),
-            });
-        }
+        await user.save((err, user) => {
+            if (err) {
+                return res.status(400).json({
+                error: errorHandler(err),
+                });
+            }
 
-        // Se oculta la contraseña
-        user.password = undefined;
+            // Se oculta la contraseña
+            user.password = undefined;
 
-        //generate a signed token with user id and secret
-        const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET);
+            //generate a signed token with user id and secret
+            const token = jwt.sign({_id: user._id, username: user.username, email: user.email}, process.env.JWT_SECRET);
 
-        // persist the token as 't' in cookie with expiry date
-        res.cookie("github_token", token, { expire: new Date() + 9999 });
-
-        res.json({token, user});
-    });
+            res.json({token, user});
+        });
+        
+    } else {
+        return res.status(400).json({
+            error: 'Something went wrong || Invalid data'
+        });
+    }
+    
 }
 
 /**

@@ -6,11 +6,15 @@ const {
     getOneUser,
     getAllUsers,
     updateUser,
-    deleteUser
+    deleteUser,
+    loginUser
 } = require('../controllers/user.controller');
 
 const { encrypt } = require('../middleware/encryptPassword');
 const { authToken } = require('../middleware/verifyToken');
+
+// Ruta para hacer login de usuario
+router.post('/login', loginUser);
 
 // Ruta para crear un usuario
 router.post('/', encrypt, createUser);
