@@ -72,7 +72,7 @@ exports.getAllTeams = async (req, res) => {
  * @param {Object} res 
  */
 exports.updateTeam = async (req, res) => {
-  let {equipoID} = req.params;
+  let {equipoId} = req.params;
 
   await Equipo.findByIdAndUpdate({_id: equipoId}, {$set: req.body}, {new: true}, (err, equipo) => {
       if (err || !equipo) {
