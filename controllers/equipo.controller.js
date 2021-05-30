@@ -171,5 +171,5 @@ exports.deleteTeam = async (req, res) => {
       });
     }
     res.json({message: 'Team succesfully deleted', equipo});
-    });
+  });
 }

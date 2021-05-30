@@ -30,6 +30,6 @@ router.put('/addMember/:equipoId', addMember)
 router.put('/removeMember/:equipoId', removeMember)
 
 // Ruta para eliminar a un equipo
-router.delete('/', deleteTeam);
+router.delete('/:equipoId', deleteTeam);
 
 module.exports = router;
