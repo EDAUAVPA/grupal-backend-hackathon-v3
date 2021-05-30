@@ -49,33 +49,23 @@ exports.loginUser = async (req, res) => {
  * @param {Object} res 
  */
 exports.createUser = async (req, res) => {
-    let newProfile = jwt.decode(req.body.token, process.env.JWT_SECRET);
+    let user = new User(req.profile);
 
-    if (newProfile) {
-        let user = new User(newProfile);
+    await user.save((err, user) => {
+        if (err) {
+            return res.status(400).json({
+            error: errorHandler(err),
+            });
+        }
 
-        await user.save((err, user) => {
-            if (err) {
-                return res.status(400).json({
-                error: errorHandler(err),
-                });
-            }
+        // Se oculta la contraseña
+        user.password = undefined;
 
-            // Se oculta la contraseña
-            user.password = undefined;
+        //generate a signed token with user id and secret
+        const token = jwt.sign({_id: user._id, username: user.username, email: user.email}, process.env.JWT_SECRET);
 
-            //generate a signed token with user id and secret
-            const token = jwt.sign({_id: user._id, username: user.username, email: user.email}, process.env.JWT_SECRET);
-
-            res.json({token, user});
-        });
-        
-    } else {
-        return res.status(400).json({
-            error: 'Something went wrong || Invalid data'
-        });
-    }
-    
+        res.json({token, user});
+    });
 }
 
 /**
@@ -129,7 +119,7 @@ exports.updateUser = async (req, res) => {
     // Encuentra el usuario con el ID proporcionado y lo actualiza
     await User.findOneAndUpdate(
         {_id: req.user._id}, 
-        {$set: req.body}, 
+        {$set: req.profile}, 
         {new: true, select: '-password'}, 
         (err, user) => {
         if (err || !user) {
